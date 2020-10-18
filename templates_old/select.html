@@ -7,7 +7,7 @@
 
 {% block content %}
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">学生向けSNS</a>
+    <a class="navbar-brand" href="{%url 'app:select'%}">学生向けSNS</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">ログイン<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{%url 'app:select_login'%}">ログイン<span class="sr-only">(current)</span></a>
           </li>
         </ul>
       </div>
@@ -29,7 +29,7 @@
       <div class="container">
         <h1 class="display-3">Hello!!</h1>
         <p>学生向けのSNSのサインアップページです！当てはまるものからアカウントを作成してください！</p>
-        <p><a class="btn btn-secondary" href="{%url 'app:login'%}" role="button">すでにアカウントをお持ちの方はこちら &raquo;</a></p>
+        <p><a class="btn btn-secondary" href="{%url 'app:select_login'%}" role="button">すでにアカウントをお持ちの方はこちら &raquo;</a></p>
       </div>
     </div>
   
@@ -44,7 +44,7 @@
         <div class="col-md-4">
             <h2>サークル</h2>
             <p>サークル用のアカウントを作成します</p>
-          <p><a class="btn btn-primary" href="#" role="button">Make Account &raquo;</a></p>
+          <p><a class="btn btn-primary" href="{%url 'app:society_create' %}" role="button">Make Account &raquo;</a></p>
         </div>
         <div class="col-md-4">
             <h2>企業</h2>
@@ -58,10 +58,6 @@
     </div> <!-- /container -->
   
   </main>
-  <!--追加-->
-  <div>
-    <p><a class="btn btn-primary" href="{%url 'app:signup'%}" role="button">Make Account &raquo;</a></p>
-  </div>
   
   <footer class="container">
     <p>&copy; Company 2017-2020</p>
