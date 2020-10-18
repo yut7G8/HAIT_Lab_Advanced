@@ -28,7 +28,7 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password,grade, **extra_fields)
 
-    def create_superuser(self, email, password, grade,**extra_fields):
+    def create_superuser(self, email, password, grade=None,**extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         if extra_fields.get('is_staff') is not True:
