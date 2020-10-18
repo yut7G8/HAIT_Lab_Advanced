@@ -15,9 +15,14 @@ from django.db.models.manager import EmptyManager
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+# install for quiz
+#from django.contrib.auth.models import AbstractUser
+#from django.utils.html import escape, mark_safe
+
 #create_userとcreate_superuserメソッドを定義しているUserManagerというクラスも修正する必要がある
 #create_user:ユーザーの新規作成時に呼び出されるメソッド
 #create_superuser:管理者用のユーザーを作成するときに使われるメソッド
+
 
 class CustomUserManager(UserManager):
     """ユーザーマネージャー"""
@@ -50,6 +55,10 @@ class CustomUserManager(UserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """カスタムユーザーモデル."""
+
+    #is_student = models.BooleanField(default=False)
+    #is_teacher = models.BooleanField(default=False)
+    
     #grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
     email = models.EmailField(_('email address'), unique=True)
@@ -82,7 +91,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    '''def get_full_name(self):
+    '''
+    def get_full_name(self):
         """Return the first_name plus the last_name, with a space in
         between."""
         full_name = '%s %s' % (self.first_name, self.last_name)
@@ -102,6 +112,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 class Student(User):
+#class Student(models.Model):
+
+    #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    #school_name = models.CharField(_('school name'),max_length=100,null=True)
+    #email = models.EmailField(_('email address'), unique=True)
     grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
@@ -119,6 +135,7 @@ class Student(User):
     def get_short_name(self):
         """Return the short name for the user."""
         return self.first_name
+
 
 class Society(User):
     society_name = models.CharField(_('society name'), max_length=30, blank=True)

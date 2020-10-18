@@ -131,6 +131,7 @@ class StudentCreate(generic.CreateView):
         student.email_user(subject, message)
         return redirect('app:user_create_done')
 
+
 class SocietyCreate(generic.CreateView):
     """ユーザー仮登録"""
     template_name = 'user_create.html'

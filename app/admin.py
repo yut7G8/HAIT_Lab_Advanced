@@ -22,7 +22,7 @@ class MyUserAdmin(UserAdmin):
         (None, {'fields': ('email', 'password')}),
         #(_('Personal info'), {'fields': ('first_name', 'last_name','grade','school_name')}),
         (_('Personal info'), {'fields': ('school_name', )}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', #'is_student', 'is_society',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -45,13 +45,13 @@ class MyUserAdmin(UserAdmin):
 
 class MyStudentChangeForm(UserChangeForm):
     class Meta:
-        model = User
+        model = Student
         fields = '__all__'
 
 
 class MyStudentCreationForm(UserCreationForm):
     class Meta:
-        model = User
+        model = Student
         fields = ('email',)
 
 
@@ -60,7 +60,7 @@ class MyStudentAdmin(UserAdmin):
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name','grade','school_name')}),
         #(_('Personal info'), {'fields': ('school_name', )}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', #'is_student', 'is_society',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
@@ -70,14 +70,15 @@ class MyStudentAdmin(UserAdmin):
             'fields': ('email', 'password1', 'password2'),
         }),
     )
-    form = MyUserChangeForm
-    add_form = MyUserCreationForm
+    form = MyStudentChangeForm
+    add_form = MyStudentCreationForm
     #list_display = ('email', 'first_name', 'last_name', 'is_staff')
     list_display = ('email', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     #search_fields = ('email', 'first_name', 'last_name')
     search_fields = ('email',)
     ordering = ('email',)
+
 
 
 class MySocietyChangeForm(UserChangeForm):
@@ -112,7 +113,6 @@ class MySocietyAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email', 'society_name')
     ordering = ('email',)
-
 
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Student, MyStudentAdmin)

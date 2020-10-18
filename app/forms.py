@@ -59,6 +59,7 @@ class SocietyCreateForm(UserCreationForm):
 
     class Meta:
         model = Society
+        #model = Student
         fields = ('email',)
 
     def __init__(self, *args, **kwargs):
@@ -69,4 +70,5 @@ class SocietyCreateForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         Society.objects.filter(email=email, is_active=False).delete()
+        #Student.objects.filter(email=email, is_active=False).delete()
         return email
