@@ -16,8 +16,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 # install for quiz
-#from django.contrib.auth.models import AbstractUser
-#from django.utils.html import escape, mark_safe
+from django.contrib.auth.models import AbstractUser
+from django.utils.html import escape, mark_safe
 
 #create_userとcreate_superuserメソッドを定義しているUserManagerというクラスも修正する必要がある
 #create_user:ユーザーの新規作成時に呼び出されるメソッド
@@ -56,8 +56,8 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """カスタムユーザーモデル."""
 
-    #is_student = models.BooleanField(default=False)
-    #is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
+    is_society = models.BooleanField(default=False)
     
     #grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
@@ -111,16 +111,42 @@ class User(AbstractBaseUser, PermissionsMixin):
     def username(self):
         return self.email
 
-class Student(User):
-#class Student(models.Model):
+'''
+class User(AbstractUser):
+    is_student = models.BooleanField(default=False)
+    is_society = models.BooleanField(default=False)
+    school_name = models.CharField(_('school name'),max_length=100,null=True)
+'''
 
-    #user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+#class Student(User):
+class Student(models.Model):
 
-    #school_name = models.CharField(_('school name'),max_length=100,null=True)
-    #email = models.EmailField(_('email address'), unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+    school_name = models.CharField(_('school name'),max_length=100,null=True)
+    email = models.EmailField(_('email address'), unique=True)
     grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
+
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_(
+            'Designates whether the user can log into this admin site.'),
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=True,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    is_superuser = models.BooleanField(default=False)
+    groups = False
+    user_permissions = False
 
     class Meta:
         verbose_name = _('student')
@@ -153,6 +179,7 @@ class Society(User):
     def get_short_name(self):
         """Return the short name for the user."""
         return self.society_name
+
 
 '''
 class AnthoerGroup(models.Model):
