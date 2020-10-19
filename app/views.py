@@ -187,19 +187,45 @@ class StudentCreate(generic.CreateView):
 
 def create_user(request):
     if request.method == 'POST':
+        #username = request.POST['username']
+        #password = request.POST['password']
         user_form = UserCreateForm(request.POST)
         student_form = StudentCreateForm(request.POST)
-        if  user_form.is_valid() and student_form.is_valid():
-            user = user_form.save()
-            student = student_form.save(commit=False)
-            student.user = user
-            student.save()
-            return redirect('app:user_create_done')
+        print('1')
+        try:
+            User.objects.get(username=username)
+            print('2')
+            return render(request, 'signup.html', {'error':'このユーザーは登録されています'})
+        except:
+            print('2.5')
+            print(user_form.is_valid())
+            print(student_form.is_valid())
+            if  user_form.is_valid() and student_form.is_valid():
+                user = user_form.save()
+                student = student_form.save()
+                student.user = user
+                student.save()
+                print('3')
+                return redirect('app:list')
     else:
         user_form = UserCreateForm()
         student_form = StudentCreateForm()
+        print('4')
+    print('5')
     return render(
         request,
-        'user_create_done.html',
-        {'user_create': user_form, 'student_create': student_form}
+        'signup2.html',
+        {'user_form': user_form, 'student_form': student_form}
     )
+
+def signupfunc(request):
+  if request.method =='POST':
+    username2 = request.POST['username']
+    password2 = request.POST['password']
+    try:
+      User.objects.get(username=username2)
+      return render(request, 'signup.html', {'error':'このユーザーは登録されています'})
+    except:
+      user = User.objects.create_user(username, '', password2)
+      return render(request, 'signup.html', {'some':100})
+  return render(request, 'signup.html', {'some':100})

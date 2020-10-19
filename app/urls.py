@@ -17,4 +17,5 @@ urlpatterns = [
 
     path('student_create/', views.StudentCreate.as_view(), name='student_create'),
     #path('user_create/', create_user, name='user_create'),
+    path('signup2/', create_user , name='signup2'),
 ]
