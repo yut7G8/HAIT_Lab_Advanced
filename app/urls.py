@@ -14,4 +14,6 @@ urlpatterns = [
     path('user_create/complete/<token>/', views.UserCreateComplete.as_view(), name='user_create_complete'),
     path('list/',listfunc,name='list'),
     path('signup/', SignUpView.as_view(), name='signup'),
+
+    path('student_create/', views.StudentCreate.as_view(), name='student_create'),
 ]

@@ -12,12 +12,17 @@ from django.shortcuts import redirect,render
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
-    LoginForm, UserCreateForm
+    LoginForm, UserCreateForm, StudentCreateForm
 )
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-User = get_user_model()
+from .models import User, Student
+from .decorators import student_required, society_required
+
+from django.contrib.auth.forms import UserCreationForm
+
+#User = get_user_model()
 
 
 def selectfunc(request):
@@ -138,3 +143,40 @@ class UserCreateComplete(generic.TemplateView):
                     return super().get(request, **kwargs)
 
         return HttpResponseBadRequest()
+
+
+
+class StudentCreate(generic.CreateView):
+    model = User
+    form_class = StudentCreateForm
+    template_name = 'user_create.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('students:quiz_list')
+
+
+
+def create_user(request):
+    if request.method == 'POST':
+        user_form = UserCreateForm(request.POST)
+        student_form = StudentCreateForm(request.POST)
+        if  user_form.is_valid() and student_form.is_valid():
+            user = user_form.save()
+            student = student_form.save(commit=False)
+            student.user = user
+            student.save()
+            return redirect('app:user_create_done')
+    else:
+        user_form = UserCreateForm()
+        student_form = StudentCreateForm()
+    return render(
+        request,
+        'app/list.html',
+        {'user_create': user_form, 'student_create': student_form}
+    )
