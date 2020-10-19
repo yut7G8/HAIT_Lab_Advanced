@@ -177,6 +177,6 @@ def create_user(request):
         student_form = StudentCreateForm()
     return render(
         request,
-        'app/list.html',
+        'user_create_done.html',
         {'user_create': user_form, 'student_create': student_form}
     )

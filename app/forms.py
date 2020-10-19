@@ -29,7 +29,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('society_name', 'school_name', 'email',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,14 +53,14 @@ class UserCreateForm(UserCreationForm):
 
 #class StudentCreateForm(UserCreationForm):
 class StudentCreateForm(ModelForm):
-    
+
     class Meta: #(UserCreationForm.Meta):
         # Userでokそう
         #model = User
         model = Student
-        fields = ('first_name','last_name',)
+        fields = ('first_name','last_name', )
 
-    '''
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -70,7 +70,7 @@ class StudentCreateForm(ModelForm):
         email = self.cleaned_data['email']
         User.objects.filter(email=email, is_active=False).delete()
         return email
-    '''
+    
 
     
     @transaction.atomic

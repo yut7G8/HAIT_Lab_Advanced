@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import selectfunc,loginfunc,listfunc,SignUpView
+from .views import selectfunc,loginfunc,listfunc,SignUpView, create_user
 
 app_name = 'app'
 
@@ -16,4 +16,5 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
 
     path('student_create/', views.StudentCreate.as_view(), name='student_create'),
+    #path('user_create/', create_user, name='user_create'),
 ]
