@@ -42,7 +42,7 @@ def home(request):
     return render(request, 'select.html')
 #-------------------------------------------------------
 
-
+'''
 def loginfunc(request):
     if request.method == 'POST':
         print(request.POST)
@@ -58,6 +58,29 @@ def loginfunc(request):
             return redirect('login')
 
     return render(request, 'login.html')
+'''
+
+def loginfunc(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user_login = User.objects.get(email=username)
+        user = authenticate(username=username, password=password)
+        #print(user_login.is_student)
+        #print(user_login.is_society)
+        if user is not None:
+            login(request, user_login)
+            if user_login.is_student:
+            #if user_login.student.is_student:
+                return render(request, 'list.html')
+            if user_login.is_society:
+                return render(request, 'list2.html')
+        else:
+            #return render(request, 'select.html')
+            return render(request, 'login44.html', {'error':'メールアドレスかパスワードが間違っています'})
+    else:
+        return render(request, 'login44.html')
+
 
 #@login_required
 def listfunc(request):

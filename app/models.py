@@ -106,7 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Student(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
+    user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='student')
     
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
