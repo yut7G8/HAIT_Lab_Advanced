@@ -47,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
     #追加した------------------------------------------
     is_student = models.BooleanField(default=False)
-    is_circle = models.BooleanField(default=False)
+    is_society = models.BooleanField(default=False)
     #-------------------------------------------------
 
 
