@@ -101,7 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 #追加した--------------------------------------------------------------------------------
-class Circle(models.Model):
+class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
 
 #----------------------------------------------------------------------------------------
