@@ -184,8 +184,28 @@ class StudentCreate(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
-        return redirect('app:list')
+        #login(self.request, user)
+        #return redirect('app:list')。
+    
+        #user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+
+        # アクティベーションURLの送付
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+        context = {
+            'protocol': self.request.scheme,
+            'domain': domain,
+            'token': dumps(user.pk),
+            'user': user,
+        }
+
+        subject = render_to_string('app/mail_template/create/subject.txt', context)
+        message = render_to_string('app/mail_template/create/message.txt', context)
+
+        user.email_user(subject, message)
+        return redirect('app:user_create_done')
 
 
 
