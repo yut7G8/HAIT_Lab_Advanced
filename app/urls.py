@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, listfunc, detailfunc, goodfunc
+from .views import selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, detailfunc, goodfunc
 
 app_name = 'app'
 
@@ -20,7 +20,6 @@ urlpatterns = [
     path('society_home',society_home,name='society_home'),
     path('company_home',company_home,name='company_home'),
 
-    path('list/', listfunc, name='list'),
     path('detail/<int:pk>', detailfunc, name='detail'),
     path('good/<int:pk>', goodfunc, name='good'),
 
@@ -29,4 +28,5 @@ urlpatterns = [
     #path('login/', views.Login.as_view(), name='login'),
     #path('user_create/', create_user, name='user_create'),
     #path('signup2/', create_user , name='signup2'),
+    #path('list/', listfunc, name='list'),
 ]

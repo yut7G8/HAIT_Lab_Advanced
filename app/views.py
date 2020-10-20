@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
 from .models import User, Student, Company, BoardModel
-from .decorators import student_required, society_required
+from .decorators import student_required, society_required, company_required
 
 from django.contrib.auth.forms import UserCreationForm
 
@@ -44,8 +44,8 @@ def loginfunc(request):
             login(request, user_login)
             if user_login.is_student:
                 #return render(request, 'list.html')
-                return redirect('app:list')
-                #return redirect('app:student_home')
+                #return redirect('app:list')
+                return redirect('app:student_home')
             if user_login.is_society:
                 #return render(request, 'society_home.html')
                 return redirect('app:society_home')
@@ -60,18 +60,23 @@ def loginfunc(request):
 
 # StudentUserのhome画面
 @login_required
+@student_required
 def student_home(request):
-    return render(request,'student_home.html')
+    object_list = BoardModel.objects.all()
+    return render(request, 'student_home.html', {'object_list':object_list})
+    #return render(request,'student_home.html')
 
 
 # SocietyUserのhome画面
 @login_required
+@society_required
 def society_home(request):
     return render(request,'society_home.html')
 
 
 # CompanyUserのhome画面
 @login_required
+@company_required
 def company_home(request):
     return render(request,'company_home.html')
 
@@ -227,23 +232,20 @@ class UserCreateComplete(generic.TemplateView):
         return HttpResponseBadRequest()
 
 
-@login_required
-def listfunc(request):
-    object_list = BoardModel.objects.all()
-    return render(request, 'list.html', {'object_list':object_list})
-  #return render(request, 'list.html')
-
-
+# 各投稿の詳細ページに飛ぶ
 def detailfunc(request, pk):
     object = BoardModel.objects.get(pk=pk)
     return render(request, 'detail.html', {'object':object})
 
 
+# いいね機能の実装
 def goodfunc(request, pk):
     post = BoardModel.objects.get(pk=pk)
     post.good = post.good + 1
     post.save()
-    return redirect('app:list')
+    return redirect('app:student_home')
+
+
 
 
 # 以下使わないが、念のため残しておく。
@@ -316,5 +318,11 @@ def signupfunc(request):
       user = User.objects.create_user(username, '', password2)
       return render(request, 'signup.html', {'some':100})
   return render(request, 'signup.html', {'some':100})
+
+@login_required
+def listfunc(request):
+    object_list = BoardModel.objects.all()
+    return render(request, 'list.html', {'object_list':object_list})
+   #return render(request, 'list.html')
 
 '''
