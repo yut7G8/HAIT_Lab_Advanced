@@ -110,15 +110,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 # StudentUser
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='student')
+
+    def __str__(self):
+        return self.user.username
     
 
     #念のため残してるけどStudentUserのこの部分は恐らくいらない。
     '''
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
-
-    #def __str__(self):
-        #return self.user.username
     
     grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
@@ -140,3 +140,9 @@ class Student(models.Model):
     
 
 
+# CompanyUser
+class Company(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='student')
+
+    def __str__(self):
+        return self.user.username
