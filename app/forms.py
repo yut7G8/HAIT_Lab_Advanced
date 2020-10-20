@@ -29,7 +29,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ( 'school_name', 'email', 'is_society', 'is_student')
+        fields = ( 'school_name', 'email',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,14 +51,14 @@ class UserCreateForm(UserCreationForm):
 #-------------------------------------------------------------------------
 
 
-#class StudentCreateForm(UserCreationForm):
-class StudentCreateForm(ModelForm):
+class StudentCreateForm(UserCreationForm):
+#class StudentCreateForm(ModelForm):
 
     class Meta: #(UserCreationForm.Meta):
         # Userでokそう
-        #model = User
-        model = Student
-        fields = ('first_name','last_name', )
+        model = User
+        #model = Student
+        fields = ('email', )
 
     
     def __init__(self, *args, **kwargs):
@@ -72,7 +72,6 @@ class StudentCreateForm(ModelForm):
         return email
     
 
-    
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
