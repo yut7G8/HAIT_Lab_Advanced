@@ -52,6 +52,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_student = models.BooleanField(default=False)
     is_society = models.BooleanField(default=False)
+    is_company = models.BooleanField(default=False)
 
 
     is_staff = models.BooleanField(
@@ -81,6 +82,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
 
+    # ここいらない
+    '''
     def get_full_name(self):
         """Return the first_name plus the last_name, with a space in
         between."""
@@ -91,6 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         """Return the short name for the user."""
         return self.first_name
+    '''
     
 
     def email_user(self, subject, message, from_email=None, **kwargs):
@@ -142,7 +146,7 @@ class Student(models.Model):
 
 # CompanyUser
 class Company(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='student')
+    user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='company')
 
     def __str__(self):
         return self.user.username

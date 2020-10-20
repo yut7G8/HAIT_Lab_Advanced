@@ -12,12 +12,12 @@ from django.shortcuts import redirect,render
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
-    LoginForm, UserCreateForm, StudentCreateForm
+    LoginForm, UserCreateForm, StudentCreateForm, CompanyCreateForm
 )
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from .models import User, Student
+from .models import User, Student, Company
 from .decorators import student_required, society_required
 
 from django.contrib.auth.forms import UserCreationForm
@@ -46,6 +46,8 @@ def loginfunc(request):
                 return render(request, 'student_home.html')
             if user_login.is_society:
                 return render(request, 'society_home.html')
+            if user_login.is_company:
+                return render(request, 'company_home.html')
         else:
             return render(request, 'login.html', {'error':'メールアドレスかパスワードが間違っています'})
     else:
@@ -62,6 +64,12 @@ def student_home(request):
 @login_required
 def society_home(request):
     return render(request,'society_home.html')
+
+
+# CompanyUserのhome画面
+@login_required
+def company_home(request):
+    return render(request,'company_home.html')
 
 
 class Logout(LogoutView):
@@ -135,6 +143,43 @@ class StudentCreate(generic.CreateView):
 
         user.email_user(subject, message)
         return redirect('app:user_create_done')
+
+
+#companyUserのsignup
+class CompanyCreate(generic.CreateView):
+    model = User
+    form_class = CompanyCreateForm
+    template_name = 'user_create.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'company'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        #login(self.request, user)
+        #return redirect('app:list')。
+    
+        #user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+
+        # アクティベーションURLの送付
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+        context = {
+            'protocol': self.request.scheme,
+            'domain': domain,
+            'token': dumps(user.pk),
+            'user': user,
+        }
+
+        subject = render_to_string('app/mail_template/create/subject.txt', context)
+        message = render_to_string('app/mail_template/create/message.txt', context)
+
+        user.email_user(subject, message)
+        return redirect('app:user_create_done')
+
 
 
 # User(Society/Student)の仮登録

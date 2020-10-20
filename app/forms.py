@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from .models import User, Student
+from .models import User, Student, Company
 
 from django.forms import ModelForm
 
@@ -75,5 +75,33 @@ class StudentCreateForm(UserCreationForm):
         user.is_student = True
         user.save()
         student = Student.objects.create(user=user)
+        return user
+
+
+# CompanyUserのsignup
+class CompanyCreateForm(UserCreationForm):
+
+    class Meta: #(UserCreationForm.Meta):
+        # Userでokそう
+        model = User
+        #model = Student
+        fields = ('email', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        User.objects.filter(email=email, is_active=False).delete()
+        return email
+    
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_company = True
+        user.save()
+        company = Company.objects.create(user=user)
         return user
     
