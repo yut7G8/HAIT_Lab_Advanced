@@ -17,7 +17,7 @@ from .forms import (
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
-from .models import User, Student, Company
+from .models import User, Student, Company, BoardModel
 from .decorators import student_required, society_required
 
 from django.contrib.auth.forms import UserCreationForm
@@ -43,11 +43,15 @@ def loginfunc(request):
         if user is not None:
             login(request, user_login)
             if user_login.is_student:
-                return render(request, 'student_home.html')
+                #return render(request, 'list.html')
+                return redirect('app:list')
+                #return redirect('app:student_home')
             if user_login.is_society:
-                return render(request, 'society_home.html')
+                #return render(request, 'society_home.html')
+                return redirect('app:society_home')
             if user_login.is_company:
-                return render(request, 'company_home.html')
+                #return render(request, 'company_home.html')
+                return redirect('app:company_home')
         else:
             return render(request, 'login.html', {'error':'メールアドレスかパスワードが間違っています'})
     else:
@@ -223,7 +227,23 @@ class UserCreateComplete(generic.TemplateView):
         return HttpResponseBadRequest()
 
 
+@login_required
+def listfunc(request):
+    object_list = BoardModel.objects.all()
+    return render(request, 'list.html', {'object_list':object_list})
+  #return render(request, 'list.html')
 
+
+def detailfunc(request, pk):
+    object = BoardModel.objects.get(pk=pk)
+    return render(request, 'detail.html', {'object':object})
+
+
+def goodfunc(request, pk):
+    post = BoardModel.objects.get(pk=pk)
+    post.good = post.good + 1
+    post.save()
+    return redirect('app:list')
 
 
 # 以下使わないが、念のため残しておく。

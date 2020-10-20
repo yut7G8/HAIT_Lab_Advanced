@@ -4,7 +4,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from .models import User, Student, Company
+from .models import User, Student, Company, BoardModel
 
 from django.forms import ModelForm
 

@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import selectfunc, loginfunc, student_home, society_home, company_home, SignUpView
+from .views import selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, listfunc, detailfunc, goodfunc
 
 app_name = 'app'
 
@@ -20,6 +20,9 @@ urlpatterns = [
     path('society_home',society_home,name='society_home'),
     path('company_home',company_home,name='company_home'),
 
+    path('list/', listfunc, name='list'),
+    path('detail/<int:pk>', detailfunc, name='detail'),
+    path('good/<int:pk>', goodfunc, name='good'),
 
 
     # 不要
