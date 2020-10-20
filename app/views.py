@@ -86,6 +86,10 @@ def loginfunc(request):
 def listfunc(request):
     return render(request,'list.html')
 
+#@login_required
+def listfunc2(request):
+    return render(request,'list2.html')
+
 class Login(LoginView):
     """ログインページ"""
     form_class = LoginForm
@@ -192,21 +196,16 @@ def create_user(request):
         user_form = UserCreateForm(request.POST)
         student_form = StudentCreateForm(request.POST)
         print('1')
-        try:
-            User.objects.get(username=username)
-            print('2')
-            return render(request, 'signup.html', {'error':'このユーザーは登録されています'})
-        except:
-            print('2.5')
-            print(user_form.is_valid())
-            print(student_form.is_valid())
-            if  user_form.is_valid() and student_form.is_valid():
-                user = user_form.save()
-                student = student_form.save()
-                student.user = user
-                student.save()
-                print('3')
-                return redirect('app:list')
+
+        print(user_form.is_valid())
+        print(student_form.is_valid())
+        if  user_form.is_valid() and student_form.is_valid():
+            user = user_form.save()
+            #student = student_form.save()
+            #student.user = user
+            #student.save()
+            print('3')
+            return redirect('app:list')
     else:
         user_form = UserCreateForm()
         student_form = StudentCreateForm()

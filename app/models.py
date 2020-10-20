@@ -111,8 +111,8 @@ class Student(models.Model):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
 
-    def __str__(self):
-        return self.user.username
+    #def __str__(self):
+        #return self.user.username
     
     '''grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
