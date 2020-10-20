@@ -38,13 +38,15 @@ class CustomUserManager(UserManager):
         return self._create_user(email, password,grade,**extra_fields)
 
 
+# SocietyUser
+# StudentUserもこのUser(for society)を引き継ぐ
 class User(AbstractBaseUser, PermissionsMixin):
     """カスタムユーザーモデル."""
     grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
     email = models.EmailField(_('email address'), unique=True)
-    #first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    #last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150, blank=True)
     society_name = models.CharField(_('society name'), max_length=150, blank=True)
 
 
@@ -85,11 +87,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         full_name = '%s %s' % (self.society_name)
         return full_name.strip()
 
-    '''
+    
     def get_short_name(self):
         """Return the short name for the user."""
         return self.first_name
-    '''
+    
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
@@ -105,16 +107,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+# StudentUser
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True, related_name='student')
     
+
+    #念のため残してるけどStudentUserのこの部分は恐らくいらない。
+    '''
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
 
     #def __str__(self):
         #return self.user.username
     
-    '''grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
+    grade = models.IntegerField(_('grade'),null=True,blank=True,default=0)
     school_name = models.CharField(_('school name'),max_length=100,null=True)
     email = models.EmailField(_('email address'), unique=True, default=None)
 

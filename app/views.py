@@ -22,78 +22,46 @@ from .decorators import student_required, society_required
 
 from django.contrib.auth.forms import UserCreationForm
 
-#User = get_user_model()
 
-
+# ログイン前のページ表示
 def selectfunc(request):
     return render(request,'select.html')
 
-#追加-----------------------------------------
+
+# signup時、studentかsocietyか選択
 class SignUpView(TemplateView):
     template_name = 'signup.html'
 
 
-def home(request):
-    if request.user.is_authenticated:
-        if request.user.is_teacher:
-            return redirect('app:list')
-        else:
-            return redirect('app:list')
-    return render(request, 'select.html')
-#-------------------------------------------------------
-
-'''
-def loginfunc(request):
-    if request.method == 'POST':
-        print(request.POST)
-        username2 = request.POST['username']
-        password2 = request.POST['password']
-        user = authenticate(request, email=username2, password=password2)
-
-        if user is not None:
-            login(request, user)
-            return render(request,'list.html')
-        
-        else:
-            return redirect('login')
-
-    return render(request, 'login.html')
-'''
-
+# login
 def loginfunc(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user_login = User.objects.get(email=username)
         user = authenticate(username=username, password=password)
-        #print(user_login.is_student)
-        #print(user_login.is_society)
         if user is not None:
             login(request, user_login)
             if user_login.is_student:
-            #if user_login.student.is_student:
-                return render(request, 'list.html')
+                return render(request, 'student_home.html')
             if user_login.is_society:
-                return render(request, 'list2.html')
+                return render(request, 'society_home.html')
         else:
-            #return render(request, 'select.html')
-            return render(request, 'login44.html', {'error':'メールアドレスかパスワードが間違っています'})
+            return render(request, 'login.html', {'error':'メールアドレスかパスワードが間違っています'})
     else:
-        return render(request, 'login44.html')
+        return render(request, 'login.html')
 
 
-#@login_required
-def listfunc(request):
-    return render(request,'list.html')
+# StudentUserのhome画面
+@login_required
+def student_home(request):
+    return render(request,'student_home.html')
 
-#@login_required
-def listfunc2(request):
-    return render(request,'list2.html')
 
-class Login(LoginView):
-    """ログインページ"""
-    form_class = LoginForm
-    template_name = 'login.html'
+# SocietyUserのhome画面
+@login_required
+def society_home(request):
+    return render(request,'society_home.html')
 
 
 class Logout(LogoutView):
@@ -101,6 +69,7 @@ class Logout(LogoutView):
     template_name = 'select.html'
 
 
+# SocietyUserのsignup
 class UserCreate(generic.CreateView):
     """ユーザー仮登録"""
     template_name = 'user_create.html'
@@ -132,11 +101,48 @@ class UserCreate(generic.CreateView):
         return redirect('app:user_create_done')
 
 
+#StudentUserのsignup
+class StudentCreate(generic.CreateView):
+    model = User
+    form_class = StudentCreateForm
+    template_name = 'user_create.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        #login(self.request, user)
+        #return redirect('app:list')。
+    
+        #user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+
+        # アクティベーションURLの送付
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+        context = {
+            'protocol': self.request.scheme,
+            'domain': domain,
+            'token': dumps(user.pk),
+            'user': user,
+        }
+
+        subject = render_to_string('app/mail_template/create/subject.txt', context)
+        message = render_to_string('app/mail_template/create/message.txt', context)
+
+        user.email_user(subject, message)
+        return redirect('app:user_create_done')
+
+
+# User(Society/Student)の仮登録
 class UserCreateDone(generic.TemplateView):
-    """ユーザー仮登録したよ"""
     template_name = 'user_create_done.html'
 
 
+# User(Society/Student)の本登録処理
 class UserCreateComplete(generic.TemplateView):
     """メール内URLアクセス後のユーザー本登録"""
     template_name = 'user_create_complete.html'
@@ -173,41 +179,38 @@ class UserCreateComplete(generic.TemplateView):
 
 
 
-class StudentCreate(generic.CreateView):
-    model = User
-    form_class = StudentCreateForm
-    template_name = 'user_create.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'student'
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        #login(self.request, user)
-        #return redirect('app:list')。
-    
-        #user = form.save(commit=False)
-        user.is_active = False
-        user.save()
-
-        # アクティベーションURLの送付
-        current_site = get_current_site(self.request)
-        domain = current_site.domain
-        context = {
-            'protocol': self.request.scheme,
-            'domain': domain,
-            'token': dumps(user.pk),
-            'user': user,
-        }
-
-        subject = render_to_string('app/mail_template/create/subject.txt', context)
-        message = render_to_string('app/mail_template/create/message.txt', context)
-
-        user.email_user(subject, message)
-        return redirect('app:user_create_done')
 
 
+# 以下使わないが、念のため残しておく。
+'''
+def loginfunc(request):
+    if request.method == 'POST':
+        print(request.POST)
+        username2 = request.POST['username']
+        password2 = request.POST['password']
+        user = authenticate(request, email=username2, password=password2)
+
+        if user is not None:
+            login(request, user)
+            return render(request,'list.html')
+        
+        else:
+            return redirect('login')
+
+    return render(request, 'login.html')
+
+def home(request):
+    if request.user.is_authenticated:
+        if request.user.is_teacher:
+            return redirect('app:list')
+        else:
+            return redirect('app:list')
+    return render(request, 'select.html')
+
+class Login(LoginView):
+    """ログインページ"""
+    form_class = LoginForm
+    template_name = 'login.html'
 
 def create_user(request):
     if request.method == 'POST':
@@ -248,3 +251,5 @@ def signupfunc(request):
       user = User.objects.create_user(username, '', password2)
       return render(request, 'signup.html', {'some':100})
   return render(request, 'signup.html', {'some':100})
+
+'''

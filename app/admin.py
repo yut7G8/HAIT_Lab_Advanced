@@ -20,7 +20,7 @@ class MyUserCreationForm(UserCreationForm):
 class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('society_name','grade','school_name','is_student','is_society')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'society_name','school_name','grade','is_student','is_society')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
@@ -33,7 +33,7 @@ class MyUserAdmin(UserAdmin):
     )
     form = MyUserChangeForm
     add_form = MyUserCreationForm
-    list_display = ('email', 'society_name', 'is_staff')
+    list_display = ('email', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email', 'society_name')
     ordering = ('email',)
@@ -44,6 +44,8 @@ class MyStudentChangeForm(UserChangeForm):
         model = Student
         fields = '__all__'
 
+
+# 'email'fieldはStudentUser特有ではないため以下のコードでエラーが出てしまう。
 '''
 class MyStudentCreationForm(UserCreationForm):
     class Meta:

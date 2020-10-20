@@ -24,12 +24,13 @@ class LoginForm(AuthenticationForm):
             field.widget.attrs['placeholder'] = field.label  # placeholderにフィールドのラベルを入れる
 
 
+# SocietyUserのsignup
 class UserCreateForm(UserCreationForm):
     """ユーザー登録用フォーム"""
 
     class Meta:
         model = User
-        fields = ( 'school_name', 'email',)
+        fields = ( 'school_name', 'society_name', 'email',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -41,26 +42,23 @@ class UserCreateForm(UserCreationForm):
         User.objects.filter(email=email, is_active=False).delete()
         return email
 
-#追加----------------------------------------------------------------------
     @transaction.atomic
     def save(self,commit=True):
         user = super().save(commit=False)
         user.is_society = True
         user.save()
         return user
-#-------------------------------------------------------------------------
 
 
+# StudentUserのsignup
 class StudentCreateForm(UserCreationForm):
-#class StudentCreateForm(ModelForm):
 
     class Meta: #(UserCreationForm.Meta):
         # Userでokそう
         model = User
         #model = Student
-        fields = ('email', )
+        fields = ('first_name', 'last_name', 'email', )
 
-    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -71,13 +69,11 @@ class StudentCreateForm(UserCreationForm):
         User.objects.filter(email=email, is_active=False).delete()
         return email
     
-
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
         user.is_student = True
         user.save()
         student = Student.objects.create(user=user)
-        #student.interests.add(*self.cleaned_data.get('interests'))
         return user
     
