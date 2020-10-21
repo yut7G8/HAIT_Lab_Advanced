@@ -1,0 +1,50 @@
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+<!DOCTYPE html>
+<html lang="ja">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="description" content=""/>
+   <title>Blog</title>
+ </head>
+ <body>
+  <!-- ヘッダー 追加 -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'blog_app:index' %}">ブログサイト</a>
+  
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+        {% if request.user.is_authenticated %} #注目
+        <li class="nav-item">
+          <a class="nav-link" href="#">{{request.user.username}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'blog_app:add' %}">投稿</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user_app:logout' %}">ログアウト</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user_app:signup' %}">新規登録</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user_app:login' %}">ログイン</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <!-- ヘッダー 追加 -->
+  <!-- コンテナー追加     -->
+   <div class="container">
+     {% block content %} 
+     {% endblock %} 
+   </div>
+  <!-- コンテナー追加     -->
+   </body>
+</html>
