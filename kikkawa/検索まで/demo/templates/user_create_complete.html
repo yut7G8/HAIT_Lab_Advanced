@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin-top: 120px">
+
+<p>
+    本登録が完了しました。<br>
+    登録されたメールアドレスとパスワードでログインしてください。<br>
+    <a class="btn btn-primary btn-lg" href="{% url 'app:login' %}">ログイン</a>
+</p>
+
+</div>
+
+{% endblock content %}
