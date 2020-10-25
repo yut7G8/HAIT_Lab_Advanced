@@ -21,7 +21,8 @@ from .models import User, Student, Company, BoardModel
 from .decorators import student_required, society_required, company_required
 
 from django.contrib.auth.forms import UserCreationForm
-
+from django.db.models import Q
+from itertools import chain
 
 # ログイン前のページ表示
 def selectfunc(request):
@@ -62,8 +63,42 @@ def loginfunc(request):
 @login_required
 @student_required
 def student_home(request):
-    object_list = BoardModel.objects.all()
-    return render(request, 'student_home.html', {'object_list':object_list})
+    query = request.GET.get('q')
+    if query:
+        object_list = BoardModel.objects.all()
+        #object_list = User.objects.all()
+
+        object_list = object_list.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query)
+        ).distinct()
+        #b_count = b_object_list.count()
+
+        # u_object_list = u_object_list.filter(
+        #     Q(society_name__icontains=query)
+        # ).distinct()
+        # u_count = u_object_list.count()
+
+        #object_list = list(chain(b_object_list,u_object_list))
+        # print(b_count)
+        # print(u_count)
+        # count_sum = b_count + u_count
+
+
+        if object_list:
+        
+            print('入ってますよ')
+
+        else:
+            print('ふざけんなこのやろうしね')
+        
+        #return render(request,'student_home.html',{'b_object_list':b_object_list,'u_object_list':u_object_list,'query':query,'count':count_sum})
+
+    else:
+        #print(BoardModel.objects.all().get(author='soccer'))
+        #count_sum = 0
+        object_list = BoardModel.objects.all()
+    return render(request, 'student_home.html', {'object_list':object_list,'query': query})
     #return render(request,'student_home.html')
 
 

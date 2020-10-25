@@ -28,6 +28,14 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           <strong>学生向けSNS</strong>
         </a>
+        <!-- 検索フォーム -->
+        <div class="d-flex justify-content-center">
+          <form class="form-inline my-2" method="GET" action="{% url 'app:student_home' %}">
+          <input type="text" class="form-control" name="q" value="{{request.GET.q}}">
+          <button type="submit" value="search" class="btn btn-outline-secondary">検索</button>
+          </form>
+          </div>
+        <!-- 検索フォーム -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -41,7 +49,12 @@
 <main role="main">
 <div class="album py-5 bg-light">
   <div class="container">
-
+    <!-- 検索結果の数 -->
+    {% if query %}
+    <p class="text-center font-weight-bold h4">検索結果は、{{object_list.count}}件</p>
+    {% endif%}
+    <!-- 検索結果の数 -->
+    
     {% for item in object_list %}
     <div class="row">
       <div class="col-md-4">
