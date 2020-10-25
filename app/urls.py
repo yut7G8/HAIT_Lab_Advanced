@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from .views import (
     selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, detailfunc, goodfunc,
-    StudentProfileDetailView, view_societies, follow_view, unfollow_view, detail_society
+    StudentProfileDetailView, view_societies, follow_view, unfollow_view, detail_society,
+    StudentDetail
 )
 
 app_name = 'app'
@@ -32,6 +33,7 @@ urlpatterns = [
     #path('<slug:username>', views.StudentProfileDetailView.as_view(), name='profile'),
     path('profile/<email>', views.StudentProfileDetailView.as_view(), name='profile'),
     #path('<slug:username>/edit', views.StudentProfileUpdateView.as_view(), name='edit'),
+    path('detail_student/<int:pk>', views.StudentDetail.as_view(), name='detail_student'),
 
     #path('<slug:username>/follow', views.follow_view, name='follow'),
     path('follow/<email>', views.follow_view, name='follow'),

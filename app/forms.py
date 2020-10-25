@@ -124,9 +124,16 @@ class StudentProfileEditForm(forms.ModelForm):
         #fields = ('name', 'email', 'username', 'about_me',)
         fields = ('first_name', 'last_name', 'school_name', 'grade', 'email', 'about_me',)
 
+    '''
     def __init__(self, *args, **kwargs):
         self.user = kwargs.get('instance', None)
         super().__init__(*args, **kwargs)
+    '''
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean_email(self):
         email = self.cleaned_data["email"]

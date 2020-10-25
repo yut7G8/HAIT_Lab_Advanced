@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import (
     LoginView, LogoutView
 )
@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login,logout, update_session_auth_
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect, render, resolve_url
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
@@ -335,6 +335,29 @@ class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = 'edit.html'
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
+class OnlyYouMixin(UserPassesTestMixin):
+    raise_exception = True
+
+    def test_func(self):
+        user = self.request.user
+        return user.pk == self.kwargs['pk'] or user.is_superuser
+
+
+class StudentDetail(OnlyYouMixin, generic.DetailView):
+    model = User
+    template_name = 'detail_student.html'
+
+
+class StudentUpdate(OnlyYouMixin, generic.UpdateView):
+    model = User
+    form_class = StudentProfileEditForm
+    template_name = 'student_form.html'
+
+    def get_success_url(self):
+        return resolve_url('app:detail_student', pk=self.kwargs['pk'])
+
 
 
 # フォロー
