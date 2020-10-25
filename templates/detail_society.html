@@ -14,8 +14,8 @@
                 <li><a href="{%url 'app:student_home'%}" class="text-white">top</a></li>
                 <li><a href="{%url 'app:logout'%}" class="text-white">Logout</a></li>
                 <li><a href="{%url 'app:login'%}" class="text-white">Change Account</a></li>
-                <li><a href="#" class="text-white">投稿する</a></li>
-                <li><a href="#" class="text-white">ユーザー情報</a></li>
+                <li><a href="{%url 'app:view_societies'%}" class="text-white">投稿する</a></li>
+                <li><a href="{%url 'app:student_profile' user.pk %}" class="text-white">ユーザー情報</a></li>
             </ul>
           </div>
         </div>

@@ -53,6 +53,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     society_name = models.CharField(_('society name'), max_length=150, blank=True)
     about_me = models.TextField(blank=True)
 
+    followers_number = models.IntegerField(_('followers_number'),null=True,blank=True,default=0)
+    following_number = models.IntegerField(_('following_number'),null=True,blank=True,default=0)
+
 
     is_student = models.BooleanField(default=False)
     is_society = models.BooleanField(default=False)

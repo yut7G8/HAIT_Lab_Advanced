@@ -28,6 +28,8 @@ from django.urls import reverse_lazy
 from .helpers import get_current_user
 from django.contrib import messages
 
+from django.utils.decorators import method_decorator
+
 # ログイン前のページ表示
 def selectfunc(request):
     return render(request,'select.html')
@@ -308,35 +310,7 @@ def detail_society(request, pk):
     return render(request, 'detail_society.html', {'society':society})
 
 
-# Studentユーザのプロフィール
-class StudentProfileDetailView(LoginRequiredMixin, DetailView):
-
-    print("views")
-    model = User
-    template_name = 'profile.html'
-
-    slug_field = 'username'
-    slug_url_kwarg = 'username'
-
-    def get_context_data(self, **kwargs):
-        context = super(StudentProfileDetailView, self).get_context_data(**kwargs)
-        #username = self.kwargs['username']
-        username = self.kwargs['email']
-        context['username'] = username
-        context['user'] = get_current_user(self.request)
-
-        return context
-
-
-# Studentユーザのプロフィール編集
-class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = User
-    form_class = StudentProfileEditForm
-    template_name = 'edit.html'
-    slug_field = 'username'
-    slug_url_kwarg = 'username'
-
-
+# Studentのプロフィールに必要
 class OnlyYouMixin(UserPassesTestMixin):
     raise_exception = True
 
@@ -345,18 +319,42 @@ class OnlyYouMixin(UserPassesTestMixin):
         return user.pk == self.kwargs['pk'] or user.is_superuser
 
 
-class StudentDetail(OnlyYouMixin, generic.DetailView):
+# Studentのプロフィール表示
+#@login_required
+#@student_required
+# なぜか上のやつあるとエラーが出る
+# その代わりにOnlyYouMixinがあると思われる
+class StudentProfile(OnlyYouMixin, generic.DetailView):
     model = User
-    template_name = 'detail_student.html'
+    template_name = 'student_profile.html'
+
+    def view_follow_societies(self):
+        user = self.request.user
+        print("hello")
+        return user
 
 
-class StudentUpdate(OnlyYouMixin, generic.UpdateView):
+# Studentのプロフィール表示を関数として自分で書いてみる
+@login_required
+@student_required
+def student_profile(request, pk):
+    student = User.objects.get(pk=pk)
+    following = Connection.objects.all()
+
+
+    return render(request, 'student_profile_2".html', {'student':student, 'following':following})
+
+
+# Studentのプロフィール編集
+#@login_required
+#@student_required
+class StudentProfileUpdate(OnlyYouMixin, generic.UpdateView):
     model = User
     form_class = StudentProfileEditForm
     template_name = 'student_form.html'
 
     def get_success_url(self):
-        return resolve_url('app:detail_student', pk=self.kwargs['pk'])
+        return resolve_url('app:student_profile', pk=self.kwargs['pk'])
 
 
 
@@ -388,6 +386,11 @@ def follow_view(request, *args, **kwargs):
         _, created = Connection.objects.get_or_create(follower=follower, following=following)
 
         if (created):
+            #print("hello")
+            #print(follower.following_number)
+            follower.following_number += 1
+            #print(follower.following_number)
+            following.followers_number += 1
             messages.success(request, '{}をフォローしました'.format(following.username))
         else:
             messages.warning(request, 'あなたはすでに{}をフォローしています'.format(following.username))
@@ -416,6 +419,8 @@ def unfollow_view(request, *args, **kwargs):
         else:
             unfollow = Connection.objects.get(follower=follower, following=following)
             unfollow.delete()
+            follower.following_number -= 1
+            following.followers_number -= 1
             messages.success(request, 'あなたは{}のフォローを外しました'.format(following.username))
     except User.DoesNotExist:
         messages.warning(request, '{}は存在しません'.format(kwargs['email']))
@@ -427,6 +432,41 @@ def unfollow_view(request, *args, **kwargs):
 
     #return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'email': following.username}))
     return render(request, 'society_list.html', {'society_list':society_list})
+
+
+
+'''
+# Studentユーザのプロフィール
+#https://jyouj.hatenablog.com/entry/2018/05/30/221927
+# 最初こっち参考にやったんだけどうまくいかなかった。
+class StudentProfileDetailView(LoginRequiredMixin, DetailView):
+
+    print("views")
+    model = User
+    template_name = 'profile.html'
+
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentProfileDetailView, self).get_context_data(**kwargs)
+        #username = self.kwargs['username']
+        username = self.kwargs['email']
+        context['username'] = username
+        context['user'] = get_current_user(self.request)
+
+        return context
+
+
+# Studentユーザのプロフィール編集
+class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    form_class = StudentProfileEditForm
+    template_name = 'edit.html'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+'''
 
 # 以下使わないが、念のため残しておく。
 '''
