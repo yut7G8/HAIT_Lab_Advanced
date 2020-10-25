@@ -319,37 +319,21 @@ class OnlyYouMixin(UserPassesTestMixin):
         return user.pk == self.kwargs['pk'] or user.is_superuser
 
 
+
 # Studentのプロフィール表示
-#@login_required
-#@student_required
-# なぜか上のやつあるとエラーが出る
-# その代わりにOnlyYouMixinがあると思われる
-class StudentProfile(OnlyYouMixin, generic.DetailView):
-    model = User
-    template_name = 'student_profile.html'
-
-    def view_follow_societies(self):
-        user = self.request.user
-        print("hello")
-        return user
-
-
 # Studentのプロフィール表示を関数として自分で書いてみる
 @login_required
 @student_required
 def student_profile(request, pk):
     student = User.objects.get(pk=pk)
     connection = Connection.objects.all()
-    #for i in range(following):
-        #print(i.follower.username)
-    #print(connection[4].follower.username == student.username)
-    #print(student.followers_number)
     following = []
     for i in range(len(connection)):
         if connection[i].follower.username == student.username:
             following.append(connection[i].following)
     #print(following[0].society_name)
-    return render(request, 'student_profile_2.html', {'student':student, 'following':following})
+    return render(request, 'student_profile.html', {'student':student, 'following':following})
+
 
 
 # Studentのプロフィール編集
@@ -463,6 +447,21 @@ class StudentProfileDetailView(LoginRequiredMixin, DetailView):
         context['user'] = get_current_user(self.request)
 
         return context
+
+
+# プロフィールその２
+#@login_required
+#@student_required
+# なぜか上のやつあるとエラーが出る
+# その代わりにOnlyYouMixinがあると思われる
+class StudentProfile(OnlyYouMixin, generic.DetailView):
+    model = User
+    template_name = 'student_profile.html'
+
+    def view_follow_societies(self):
+        user = self.request.user
+        print("hello")
+        return user
 
 
 # Studentユーザのプロフィール編集
