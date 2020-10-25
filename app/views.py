@@ -330,11 +330,17 @@ class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 @login_required
 def follow_view(request, *args, **kwargs):
     try:
-        follower = User.objects.get(username=request.user.username)
-        following = User.objects.get(username=kwargs['username'])
+        #follower = User.objects.get(username=request.user.username)
+        follower = User.objects.get(email=request.user.email)
+        #print(request.user.email)
+        #print(kwargs)
+        #print("hello")
+        #following = User.objects.get(username=kwargs['username'])
+        following = User.objects.get(email=kwargs['email'])
     except User.DoesNotExist:
-        messages.warning(request, '{}は存在しません'.format(kwargs['username']))
-        return HttpResponseRedirect(reverse_lazy('users:index'))
+        messages.warning(request, '{}は存在しません'.format(kwargs['email']))
+        #return HttpResponseRedirect(reverse_lazy('users:index'))
+        return redirect('app:student_home')
 
     if follower == following:
         messages.warning(request, '自分自身はフォローできませんよ')
@@ -346,7 +352,8 @@ def follow_view(request, *args, **kwargs):
         else:
             messages.warning(request, 'あなたはすでに{}をフォローしています'.format(following.username))
 
-    return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'username': following.username}))
+    #return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'email': following.username}))
+    return redirect('app:student_home')
 
 
 # アンフォロー
