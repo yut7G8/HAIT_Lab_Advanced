@@ -288,7 +288,7 @@ def goodfunc(request, pk):
     return redirect('app:student_home')
 
 
-# Studentユーザに対するSocietyアカウントの表示
+# Studentユーザに対するSocietyアカウントの一覧表示
 @login_required
 @student_required
 def view_societies(request):
@@ -298,6 +298,14 @@ def view_societies(request):
         if user.is_society:
             society_list.append(user)
     return render(request, 'society_list.html', {'society_list':society_list})
+
+
+# Studentユーザに対する各Societyアカウントの詳細表示
+@login_required
+@student_required
+def detail_society(request, pk):
+    society = User.objects.get(pk=pk)
+    return render(request, 'detail_society.html', {'society':society})
 
 
 # Studentユーザのプロフィール
@@ -329,6 +337,11 @@ class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 # フォロー
 @login_required
 def follow_view(request, *args, **kwargs):
+    user_list = User.objects.all()
+    society_list = []
+    for user in user_list:
+        if user.is_society:
+            society_list.append(user)
     try:
         #follower = User.objects.get(username=request.user.username)
         follower = User.objects.get(email=request.user.email)
@@ -340,7 +353,7 @@ def follow_view(request, *args, **kwargs):
     except User.DoesNotExist:
         messages.warning(request, '{}は存在しません'.format(kwargs['email']))
         #return HttpResponseRedirect(reverse_lazy('users:index'))
-        return redirect('app:student_home')
+        return render(request, 'society_list.html', {'society_list':society_list})
 
     if follower == following:
         messages.warning(request, '自分自身はフォローできませんよ')
@@ -353,15 +366,23 @@ def follow_view(request, *args, **kwargs):
             messages.warning(request, 'あなたはすでに{}をフォローしています'.format(following.username))
 
     #return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'email': following.username}))
-    return redirect('app:student_home')
+    return render(request, 'society_list.html', {'society_list':society_list})
 
 
 # アンフォロー
 @login_required
 def unfollow_view(request, *args, **kwargs):
+    user_list = User.objects.all()
+    society_list = []
+    for user in user_list:
+        if user.is_society:
+            society_list.append(user)
     try:
-        follower = User.objects.get(username=request.user.username)
-        following = User.objects.get(username=kwargs['username'])
+        #follower = User.objects.get(username=request.user.username)
+        #following = User.objects.get(username=kwargs['username'])
+        follower = User.objects.get(email=request.user.email)
+        following = User.objects.get(email=kwargs['email'])
+
         if follower == following:
             messages.warning(request, '自分自身のフォローを外せません')
         else:
@@ -369,12 +390,15 @@ def unfollow_view(request, *args, **kwargs):
             unfollow.delete()
             messages.success(request, 'あなたは{}のフォローを外しました'.format(following.username))
     except User.DoesNotExist:
-        messages.warning(request, '{}は存在しません'.format(kwargs['username']))
-        return HttpResponseRedirect(reverse_lazy('users:index'))
+        messages.warning(request, '{}は存在しません'.format(kwargs['email']))
+        #return HttpResponseRedirect(reverse_lazy('users:index'))
+        return render(request, 'society_list.html', {'society_list':society_list})
+        
     except Connection.DoesNotExist:
         messages.warning(request, 'あなたは{0}をフォローしませんでした'.format(following.username))
 
-    return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'username': following.username}))
+    #return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'email': following.username}))
+    return render(request, 'society_list.html', {'society_list':society_list})
 
 # 以下使わないが、念のため残しておく。
 '''

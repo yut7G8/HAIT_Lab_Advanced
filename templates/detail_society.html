@@ -34,20 +34,19 @@
     </div>
   </header>
 {% endblock header %}
- 
+
 {% block content %}
 <br>
 <div class='container'>
  
   <div class="alert alert-success" role="alert">
-    <p>タイトル：{{object.title}}</p>
-    <p>投稿者：{{object.auther}}</p>
-    <p>内容：{{object.content}}</p>
-    <p><img src="{{object.images.url}}" width=300></p>
+    <p>サークル名：{{society.society_name}}</p>
+    <p>投稿者：{{society.school_name}}</p>
+    <p>代表者連絡先：{{society.email}}</p>
  
     <!--<a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">いいねする</a>-->
-    <a href="{%url 'app:good' object.pk %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">いいね：{{item.good}}</a>
-    <a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">既読にする</a>
+    <a href="{%url 'app:follow' society.email %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">フォロー</a>
+    <a href="{%url 'app:unfollow' society.email %}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">フォロー解除</a>
   </div>
  
  
