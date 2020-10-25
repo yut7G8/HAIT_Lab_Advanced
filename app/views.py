@@ -310,6 +310,8 @@ def detail_society(request, pk):
 
 # Studentユーザのプロフィール
 class StudentProfileDetailView(LoginRequiredMixin, DetailView):
+
+    print("views")
     model = User
     template_name = 'profile.html'
 
@@ -318,7 +320,8 @@ class StudentProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(StudentProfileDetailView, self).get_context_data(**kwargs)
-        username = self.kwargs['username']
+        #username = self.kwargs['username']
+        username = self.kwargs['email']
         context['username'] = username
         context['user'] = get_current_user(self.request)
 
@@ -336,6 +339,7 @@ class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 # フォロー
 @login_required
+@student_required
 def follow_view(request, *args, **kwargs):
     user_list = User.objects.all()
     society_list = []
@@ -371,6 +375,7 @@ def follow_view(request, *args, **kwargs):
 
 # アンフォロー
 @login_required
+@student_required
 def unfollow_view(request, *args, **kwargs):
     user_list = User.objects.all()
     society_list = []

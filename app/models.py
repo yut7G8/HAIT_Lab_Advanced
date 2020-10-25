@@ -117,7 +117,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
     def get_absolute_url(self):
-        return reverse('users:profile', kwargs={'username': self.username})
+        print("model")
+        return reverse('profile', kwargs={'username': self.username})
 
 
 # StudentUser
