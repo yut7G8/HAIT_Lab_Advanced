@@ -4,10 +4,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView, LogoutView
 )
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login,logout, update_session_auth_hash
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
-from django.http import Http404, HttpResponseBadRequest
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import redirect,render
 from django.template.loader import render_to_string
 from django.views import generic
@@ -17,7 +17,7 @@ from .forms import (
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView, UpdateView
 
-from .models import User, Student, Company, BoardModel
+from .models import User, Student, Company, BoardModel, Connection
 from .decorators import student_required, society_required, company_required
 
 from django.contrib.auth.forms import UserCreationForm
@@ -26,6 +26,7 @@ from itertools import chain
 
 from django.urls import reverse_lazy
 from .helpers import get_current_user
+from django.contrib import messages
 
 # ログイン前のページ表示
 def selectfunc(request):
@@ -287,6 +288,18 @@ def goodfunc(request, pk):
     return redirect('app:student_home')
 
 
+# Studentユーザに対するSocietyアカウントの表示
+@login_required
+@student_required
+def view_societies(request):
+    user_list = User.objects.all()
+    society_list = []
+    for user in user_list:
+        if user.is_society:
+            society_list.append(user)
+    return render(request, 'society_list.html', {'society_list':society_list})
+
+
 # Studentユーザのプロフィール
 class StudentProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -313,7 +326,48 @@ class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     slug_url_kwarg = 'username'
 
 
+# フォロー
+@login_required
+def follow_view(request, *args, **kwargs):
+    try:
+        follower = User.objects.get(username=request.user.username)
+        following = User.objects.get(username=kwargs['username'])
+    except User.DoesNotExist:
+        messages.warning(request, '{}は存在しません'.format(kwargs['username']))
+        return HttpResponseRedirect(reverse_lazy('users:index'))
 
+    if follower == following:
+        messages.warning(request, '自分自身はフォローできませんよ')
+    else:
+        _, created = Connection.objects.get_or_create(follower=follower, following=following)
+
+        if (created):
+            messages.success(request, '{}をフォローしました'.format(following.username))
+        else:
+            messages.warning(request, 'あなたはすでに{}をフォローしています'.format(following.username))
+
+    return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'username': following.username}))
+
+
+# アンフォロー
+@login_required
+def unfollow_view(request, *args, **kwargs):
+    try:
+        follower = User.objects.get(username=request.user.username)
+        following = User.objects.get(username=kwargs['username'])
+        if follower == following:
+            messages.warning(request, '自分自身のフォローを外せません')
+        else:
+            unfollow = Connection.objects.get(follower=follower, following=following)
+            unfollow.delete()
+            messages.success(request, 'あなたは{}のフォローを外しました'.format(following.username))
+    except User.DoesNotExist:
+        messages.warning(request, '{}は存在しません'.format(kwargs['username']))
+        return HttpResponseRedirect(reverse_lazy('users:index'))
+    except Connection.DoesNotExist:
+        messages.warning(request, 'あなたは{0}をフォローしませんでした'.format(following.username))
+
+    return HttpResponseRedirect(reverse_lazy('users:profile', kwargs={'username': following.username}))
 
 # 以下使わないが、念のため残しておく。
 '''
