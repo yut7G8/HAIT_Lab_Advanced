@@ -12,10 +12,10 @@ from django.shortcuts import redirect,render
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
-    LoginForm, UserCreateForm, StudentCreateForm, CompanyCreateForm
+    LoginForm, UserCreateForm, StudentCreateForm, CompanyCreateForm, StudentProfileEditForm
 )
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView, UpdateView
 
 from .models import User, Student, Company, BoardModel
 from .decorators import student_required, society_required, company_required
@@ -23,6 +23,9 @@ from .decorators import student_required, society_required, company_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from itertools import chain
+
+from django.urls import reverse_lazy
+from .helpers import get_current_user
 
 # ログイン前のページ表示
 def selectfunc(request):
@@ -98,7 +101,10 @@ def student_home(request):
         #print(BoardModel.objects.all().get(author='soccer'))
         #count_sum = 0
         object_list = BoardModel.objects.all()
-    return render(request, 'student_home.html', {'object_list':object_list,'query': query})
+
+        #student = User.objects.all()
+
+    return render(request, 'student_home.html', {'object_list':object_list,'query': query,})
     #return render(request,'student_home.html')
 
 
@@ -279,6 +285,32 @@ def goodfunc(request, pk):
     post.good = post.good + 1
     post.save()
     return redirect('app:student_home')
+
+
+# Studentユーザのプロフィール
+class StudentProfileDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'profile.html'
+
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentProfileDetailView, self).get_context_data(**kwargs)
+        username = self.kwargs['username']
+        context['username'] = username
+        context['user'] = get_current_user(self.request)
+
+        return context
+
+
+# Studentユーザのプロフィール編集
+class StudentProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    form_class = StudentProfileEditForm
+    template_name = 'edit.html'
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
 
 
 

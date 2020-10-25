@@ -5,6 +5,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from django.urls import reverse
+#from django.utils.encoding import python_2_unicode_compatible
+
 #create_userとcreate_superuserメソッドを定義しているUserManagerというクラスも修正する必要がある
 #create_user:ユーザーの新規作成時に呼び出されるメソッド
 #create_superuser:管理者用のユーザーを作成するときに使われるメソッド
@@ -48,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
     society_name = models.CharField(_('society name'), max_length=150, blank=True)
+    about_me = models.TextField(blank=True)
 
 
     is_student = models.BooleanField(default=False)
@@ -101,6 +105,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+
     @property
     def username(self):
         """username属性のゲッター
@@ -109,6 +114,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         メールアドレスを返す
         """
         return self.email
+
+
+    def get_absolute_url(self):
+        return reverse('users:profile', kwargs={'username': self.username})
 
 
 # StudentUser

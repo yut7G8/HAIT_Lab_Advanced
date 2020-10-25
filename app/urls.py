@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
-from .views import selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, detailfunc, goodfunc
+from .views import (
+    selectfunc, loginfunc, student_home, society_home, company_home, SignUpView, detailfunc, goodfunc,
+    StudentProfileDetailView,
+)
 
 app_name = 'app'
 
@@ -22,6 +25,9 @@ urlpatterns = [
 
     path('detail/<int:pk>', detailfunc, name='detail'),
     path('good/<int:pk>', goodfunc, name='good'),
+
+    path('<str:username>', views.StudentProfileDetailView.as_view(), name='profile'),
+    #path('<slug:username>/edit', views.StudentProfileUpdateView.as_view(), name='edit'),
 
 
     # 不要
