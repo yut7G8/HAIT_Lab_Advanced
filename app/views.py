@@ -339,10 +339,17 @@ class StudentProfile(OnlyYouMixin, generic.DetailView):
 @student_required
 def student_profile(request, pk):
     student = User.objects.get(pk=pk)
-    following = Connection.objects.all()
-
-
-    return render(request, 'student_profile_2".html', {'student':student, 'following':following})
+    connection = Connection.objects.all()
+    #for i in range(following):
+        #print(i.follower.username)
+    #print(connection[4].follower.username == student.username)
+    #print(student.followers_number)
+    following = []
+    for i in range(len(connection)):
+        if connection[i].follower.username == student.username:
+            following.append(connection[i].following)
+    #print(following[0].society_name)
+    return render(request, 'student_profile_2.html', {'student':student, 'following':following})
 
 
 # Studentのプロフィール編集
