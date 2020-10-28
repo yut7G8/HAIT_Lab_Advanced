@@ -62,4 +62,4 @@ admin.site.register(User, MyUserAdmin)
 admin.site.register(Student)
 admin.site.register(Company)
 admin.site.register(BoardModel)
-admin.site.register(Tag) # 管理者画面にTagを追加
+# admin.site.register(Tag) # 管理者画面にTagを追加
