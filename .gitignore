@@ -1,2 +1,3 @@
 db.sqlite3
 appproject/__pycache__/
+app/__pycache__/
