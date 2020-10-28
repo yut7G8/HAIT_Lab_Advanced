@@ -168,6 +168,7 @@ class BoardModel(models.Model):
     good = models.IntegerField()
     read = models.IntegerField()
     readtext = models.CharField(max_length=200)
+    tag = models.ForeignKey(Tag, verbose_name = 'タグ', on_delete=models.PROTECT) # TagクラスとBoardModleの紐づけ
 
     def __str__(self):
         return self.titile
