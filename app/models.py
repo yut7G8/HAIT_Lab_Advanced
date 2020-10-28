@@ -162,3 +162,6 @@ class BoardModel(models.Model):
     good = models.IntegerField()
     read = models.IntegerField()
     readtext = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.titile
