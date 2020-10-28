@@ -152,6 +152,12 @@ class Company(models.Model):
         return self.user.username
 
 
+# Tagクラスの作成
+class Tag(models.Model):
+    tag = models.CharField('タグ名', max_length=50)
+    def __str__(self):
+        return self.tag
+
 # 投稿用モデル
 class BoardModel(models.Model):
     title = models.CharField('タイトル', max_length=100)
