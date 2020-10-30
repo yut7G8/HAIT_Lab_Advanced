@@ -21,7 +21,7 @@ urlpatterns = [
     path('company_home',company_home,name='company_home'),
 
     path('detail/', views.detailfunc, name='detailfun'), # views.pyのdetailfuncを参照
-    path('detail/<int:boardmodel_id>', views.detail, name='detail'), # views.pyのdetail関数を参照
+    path('detail/<int:everypost_id>', views.everypost, name='everypost'), # views.pyのeverypost関数を参照
     
     path('good/<int:pk>', goodfunc, name='good'),
 ]
