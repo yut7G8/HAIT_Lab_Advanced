@@ -1,0 +1,7 @@
+<h1>everypost page</h1>
+<hr>
+{% if object.image %}
+ <img src="{{ object.image.url }}">
+{% endif %}
+<h4>タイトル：{{ object.title }}</h4>
+<p>内容：{{ object.text }}</p>
