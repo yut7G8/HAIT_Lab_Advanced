@@ -238,8 +238,8 @@ def detailfunc(request):
     return render(request, 'detail.html', {'object':object})
 
 # 各BoardModelを参照するため用のdetail関数を用意
-def everypost(request, everypost_id):
-    object = get_object_or_404(BoardModel, id=everypost_id)
+def everypost(request, everypost_id): # urls.pyから送られてくるrequestとeverypost_idを取得
+    object = get_object_or_404(BoardModel, id=everypost_id) # idが存在しなかった場合、「404 not found」
     return render(request, 'everypost.html', {'object': object})
 
 # いいね機能の実装
