@@ -1,13 +1,13 @@
 <h1>this is index.</h1>
-
-<!-- 追加 -->
-{% for post in posts%}
- {% if post.image %}
-   <img src="{{ post.image.url }}">
+{% for every_object in object%}
+ {% if every_object.image %}
+   <img src="{{ every_object.image.url }}">
  {% endif %}
-   <h5>{{post.title|truncatechars:13 | linebreaksbr}}</h5>
-   <p>{{post.text}}</p>
-   <p>#{{post.tag}}</p>
-   <p>{{post.created_at}}</p>
+   <h5>{{every_object.title|truncatechars:13 | linebreaksbr}}</h5>
+   <p>{{every_object.content}}</p>
+   <p>#{{every_object.author}}</p>
+   <p>{{every_object.good}}</p>
+   <p>{{every_object.read}}</p>
+   <p>{{every_object.readtext}}</p>
    <hr>
 {% endfor %}
