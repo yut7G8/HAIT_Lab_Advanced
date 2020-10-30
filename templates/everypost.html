@@ -1,3 +1,6 @@
+{% extends 'base.html' %} <!-- 追加 -->
+{% block content %} <!-- 追加 -->
+
 <h1>everypost page</h1>
 <hr>
 {% if object.image %}
@@ -5,3 +8,5 @@
 {% endif %}
 <h4>タイトル：{{ object.title }}</h4>
 <p>内容：{{ object.content }}</p>
+
+{% endblock %} <!-- 追加 -->
