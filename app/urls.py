@@ -20,13 +20,6 @@ urlpatterns = [
     path('society_home',society_home,name='society_home'),
     path('company_home',company_home,name='company_home'),
 
-    path('detail/<int:pk>', detailfunc, name='detail'),
+    path('detail/', detailfunc, name='detail'),
     path('good/<int:pk>', goodfunc, name='good'),
-
-
-    # 不要
-    #path('login/', views.Login.as_view(), name='login'),
-    #path('user_create/', create_user, name='user_create'),
-    #path('signup2/', create_user , name='signup2'),
-    #path('list/', listfunc, name='list'),
 ]
