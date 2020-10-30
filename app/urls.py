@@ -20,6 +20,6 @@ urlpatterns = [
     path('society_home',society_home,name='society_home'),
     path('company_home',company_home,name='company_home'),
 
-    path('detail/', detailfunc, name='detail'),
+    path('detail/<int:boardmodel_id>', detailfunc, name='detail'), # 変更箇所
     path('good/<int:pk>', goodfunc, name='good'),
 ]
