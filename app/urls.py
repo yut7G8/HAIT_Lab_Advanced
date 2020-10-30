@@ -20,6 +20,8 @@ urlpatterns = [
     path('society_home',society_home,name='society_home'),
     path('company_home',company_home,name='company_home'),
 
-    path('detail/<int:boardmodel_id>', detailfunc, name='detail'), # 変更箇所
+    path('detail/', views.detailfunc, name='detailfun'), # views.pyのdetailfuncを参照
+    path('detail/<int:boardmodel_id>', views.detail, name='detail'), # views.pyのdetail関数を参照
+    
     path('good/<int:pk>', goodfunc, name='good'),
 ]
