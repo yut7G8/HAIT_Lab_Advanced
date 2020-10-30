@@ -234,7 +234,7 @@ class UserCreateComplete(generic.TemplateView):
 
 # 各投稿の詳細ページに飛ぶ
 def detailfunc(request, pk):
-    object = BoardModel.objects.get(pk=pk)
+    object = BoardModel.objects.all().order_by('-created_at') # BoardModelの投稿(object)を全て(all())作成された順番(order_by('-created_at))に取得してobject変数に代入
     return render(request, 'detail.html', {'object':object})
 
 
