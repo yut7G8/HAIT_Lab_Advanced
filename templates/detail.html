@@ -1,13 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>this is index.</h1>
 {% for every_object in object%}
+<a href="{% url 'app:everypost' everypost_id=everypost.id %}">
  {% if every_object.image %}
    <img src="{{ every_object.image.url }}">
  {% endif %}
    <h5>{{every_object.title|truncatechars:13 | linebreaksbr}}</h5>
    <p>{{every_object.content}}</p>
+</a>
    <p>#{{every_object.author}}</p>
    <p>{{every_object.good}}</p>
    <p>{{every_object.read}}</p>
    <p>{{every_object.readtext}}</p>
    <hr>
 {% endfor %}
+
+{% endblock %}
