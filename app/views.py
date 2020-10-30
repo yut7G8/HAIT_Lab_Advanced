@@ -234,7 +234,7 @@ class UserCreateComplete(generic.TemplateView):
 
 # 各投稿の詳細ページに飛ぶ
 def detailfunc(request):
-    object = BoardModel.objects.all().order_by('-readtext')
+    object = BoardModel.objects.all().order_by('-readtext') # BordModelモデルの記事（objects）を全て(all())作成された順番（order_by('-readtext')）に取得してobject変数に代入
     return render(request, 'detail.html', {'object':object})
 
 
@@ -244,7 +244,6 @@ def goodfunc(request, pk):
     post.good = post.good + 1
     post.save()
     return redirect('app:student_home')
-
 
 
 
