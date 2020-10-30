@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.http import Http404, HttpResponseBadRequest
-from django.shortcuts import redirect,render
+from django.shortcuts import redirect,render,get_object_or_404 # 追加
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
@@ -237,6 +237,10 @@ def detailfunc(request):
     object = BoardModel.objects.all().order_by('-readtext') # BordModelモデルの記事（objects）を全て(all())作成された順番（order_by('-readtext')）に取得してobject変数に代入
     return render(request, 'detail.html', {'object':object})
 
+# 各BoardModelを参照するため用のdetail関数を用意
+def everypost(request, everypost_id):
+    object = get_object_or_404(BoardModel, id=everypost_id)
+    return render(request, 'everypost.html', {'object': object})
 
 # いいね機能の実装
 def goodfunc(request, pk):
