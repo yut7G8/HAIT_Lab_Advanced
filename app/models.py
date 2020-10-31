@@ -167,6 +167,11 @@ class Company(models.Model):
 
 # 投稿用モデル
 class BoardModel(models.Model):
+
+    # user(society)との紐付け
+    #user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
+
+    # 各種変数
     title = models.CharField(max_length=100)
     content = models.TextField()
     author = models.CharField(max_length=100)
@@ -174,6 +179,8 @@ class BoardModel(models.Model):
     good = models.IntegerField()
     read = models.IntegerField()
     readtext = models.CharField(max_length=200)
+    #date_created = models.DateTimeField(auto_now_add=True)
+    #like_num = models.IntegerField(default=0)
 
 
 # フォロー
