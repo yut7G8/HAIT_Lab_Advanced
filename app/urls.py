@@ -22,9 +22,10 @@ urlpatterns = [
 
     # nagaya_develop_branchの変更箇所
     path('detail/', views.detailfunc, name='detailfun'), # views.pyのdetailfuncを参照
-    path('detail/<int:post_id>', views.everypost, name='everypost'), # views.pyのeverypost関数を参照
+    path('detail/<int:post_id>/', views.everypost, name='everypost'), # views.pyのeverypost関数を参照
     path('add/', views.add, name='add'), # 投稿フォーム用のpath(仮)設定
-    path('edit/<int:post_id>', views.edit, name='edit'), # 編集機能の追加
+    path('edit/<int:post_id>/', views.edit, name='edit'), # 編集機能の追加
+    path('delete/<int:post_id>/', views.delete, name='delete'), # 削除機能の追加
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     path('good/<int:pk>', goodfunc, name='good'),
