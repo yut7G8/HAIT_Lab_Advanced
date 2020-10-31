@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'django_cleanup', # 追加
+    'django_cleanup',
+    'bootstrap4', # 追加
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            #追加 
+           'builtins':[ 
+               'bootstrap4.templatetags.bootstrap4',
+           ],
         },
     },
 ]
