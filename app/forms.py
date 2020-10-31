@@ -108,5 +108,5 @@ class CompanyCreateForm(UserCreationForm):
 # 投稿用のフォームを作成
 class PostAddForm(forms.ModelForm):
     class Meta:
-        model = BoardModel
-        fields = ['title', 'content', 'author','imgaes', 'good', 'read', 'readtext']
+        model = BoardModel # model変数にBoardModelを代入
+        fields = ['title', 'content', 'author','imgaes', 'good', 'read', 'readtext'] # fields変数にフォームで使用するラベルと代入
