@@ -105,3 +105,8 @@ class CompanyCreateForm(UserCreationForm):
         company = Company.objects.create(user=user)
         return user
     
+# 投稿用のフォームを作成
+class PostAddForm(forms.ModelForm):
+    class Meta:
+        model = BoardModel
+        fields = ['title', 'content', 'author','imgaes', 'good', 'read', 'readtext']
