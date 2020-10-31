@@ -8,6 +8,6 @@
 {% endif %}
 <h4>タイトル：{{ post.title }}</h4>
 <p>内容：{{ post.content }}</p>
-<button><a href="{% url 'blog_app:edit' post_id=post.id %}">編集</a></button>
-<button><a href="{% url 'blog_app:delete' post_id=post.id %}">削除</a></button>
+<button><a href="{% url 'app:edit' post_id=post.id %}">編集</a></button>
+<button><a href="{% url 'app:delete' post_id=post.id %}">削除</a></button>
 {% endblock %}
