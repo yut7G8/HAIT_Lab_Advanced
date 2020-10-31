@@ -48,7 +48,7 @@ def loginfunc(request):
                 return redirect('app:student_home')
             if user_login.is_society:
                 #return render(request, 'society_home.html')
-                return redirect('app:society_home')
+                return redirect('app:detailfun')
             if user_login.is_company:
                 #return render(request, 'company_home.html')
                 return redirect('app:company_home')
