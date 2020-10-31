@@ -250,10 +250,10 @@ def add(request):
         post = form.save(commit=False)
         post.user = request.user
         post.save()
-        return redirect('blog_app:index')
+        return redirect('app:detailfun')
    else:   
        form = PostAddForm()
-   return render(request, 'blog_app/add.html', {'form': form})
+   return render(request, 'app/add.html', {'form': form})
 
 # 編集フォーム用のedit関数
 def edit(request, post_id):
@@ -262,7 +262,7 @@ def edit(request, post_id):
        form = PostAddForm(request.POST, request.FILES, instance=post)
        if form.is_valid():
            form.save()
-           return redirect('app:detailfun', post_id=post.id)
+           return redirect('app:everypost', post_id=post.id)
    else:
        form = PostAddForm(instance=post)
    return render(request, 'app/edit.html', {'form': form, 'post':post })
