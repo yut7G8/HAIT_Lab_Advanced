@@ -1,5 +1,5 @@
-{% extends 'base.html' %} <!-- 追加 -->
-{% block content %} <!-- 追加 -->
+{% extends 'base.html' %}
+{% block content %}
 
 <h1>everypost page</h1>
 <hr>
@@ -8,5 +8,6 @@
 {% endif %}
 <h4>タイトル：{{ post.title }}</h4>
 <p>内容：{{ post.content }}</p>
-
-{% endblock %} <!-- 追加 -->
+<button><a href="{% url 'blog_app:edit' post_id=post.id %}">編集</a></button>
+<button><a href="{% url 'blog_app:delete' post_id=post.id %}">削除</a></button>
+{% endblock %}
