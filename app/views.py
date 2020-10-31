@@ -254,10 +254,10 @@ def add(request):
    if request.method == "POST":
       form = PostAddForm(request.POST, request.FILES)
       if form.is_valid():
-         post = form.save(commit=False)
-         post.user = request.user
-         post.save()
-         return redirect('blog_app:index')
+        post = form.save(commit=False)
+        post.user = request.user
+        post.save()
+        return redirect('blog_app:index')
    else:   
        form = PostAddForm()
    return render(request, 'blog_app/add.html', {'form': form})
