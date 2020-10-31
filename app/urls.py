@@ -22,6 +22,6 @@ urlpatterns = [
 
     path('detail/', views.detailfunc, name='detailfun'), # views.pyのdetailfuncを参照
     path('detail/<int:post_id>', views.everypost, name='everypost'), # views.pyのeverypost関数を参照
-    
+    path('add/', views.add, name='add'), # 投稿フォーム用のpath(仮)設定
     path('good/<int:pk>', goodfunc, name='good'),
 ]
