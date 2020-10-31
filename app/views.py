@@ -12,7 +12,7 @@ from django.shortcuts import redirect,render,get_object_or_404 # 追加
 from django.template.loader import render_to_string
 from django.views import generic
 from .forms import (
-    LoginForm, UserCreateForm, StudentCreateForm, CompanyCreateForm
+    LoginForm, UserCreateForm, StudentCreateForm, CompanyCreateForm, PostAddForm # PostAddFormの追加
 )
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
@@ -248,3 +248,16 @@ def goodfunc(request, pk):
     post.good = post.good + 1
     post.save()
     return redirect('app:student_home')
+
+# 投稿フォーム用のadd関数
+def add(request):
+   if request.method == "POST":
+      form = PostAddForm(request.POST, request.FILES)
+      if form.is_valid():
+         post = form.save(commit=False)
+         post.user = request.user
+         post.save()
+         return redirect('blog_app:index')
+   else:   
+       form = PostAddForm()
+   return render(request, 'blog_app/add.html', {'form': form})
