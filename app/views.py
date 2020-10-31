@@ -255,7 +255,7 @@ def add(request):
        form = PostAddForm()
    return render(request, 'add.html', {'form': form})
 
-# 編集フォーム用のedit関数
+# 編集フォーム用のedit関数。編集ボタンをeverypost.htmlに作成。
 def edit(request, post_id):
    post = get_object_or_404(BoardModel, id=post_id)
    if request.method == "POST":
@@ -268,6 +268,7 @@ def edit(request, post_id):
    return render(request, 'edit.html', {'form': form, 'post':post })
 
 # 削除フォーム用のdelete関数
+# 削除機能はHTMLファイルを作成する必要がない。everypost.htmlに削除ボタンを作成。
 def delete(request, post_id):
    post = get_object_or_404(BoardModel, id=post_id)
    post.delete()
