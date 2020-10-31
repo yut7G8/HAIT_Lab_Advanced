@@ -3,10 +3,10 @@
 
 <h1>everypost page</h1>
 <hr>
-{% if object.image %}
- <img src="{{ object.image.url }}">
+{% if post.image %}
+ <img src="{{ post.image.url }}">
 {% endif %}
-<h4>タイトル：{{ object.title }}</h4>
-<p>内容：{{ object.content }}</p>
+<h4>タイトル：{{ post.title }}</h4>
+<p>内容：{{ post.content }}</p>
 
 {% endblock %} <!-- 追加 -->
