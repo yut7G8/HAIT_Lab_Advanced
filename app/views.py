@@ -253,7 +253,7 @@ def add(request):
         return redirect('app:detailfun')
    else:   
        form = PostAddForm()
-   return render(request, 'app/add.html', {'form': form})
+   return render(request, 'add.html', {'form': form})
 
 # 編集フォーム用のedit関数
 def edit(request, post_id):
@@ -265,7 +265,7 @@ def edit(request, post_id):
            return redirect('app:everypost', post_id=post.id)
    else:
        form = PostAddForm(instance=post)
-   return render(request, 'app/edit.html', {'form': form, 'post':post })
+   return render(request, 'edit.html', {'form': form, 'post':post })
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # いいね機能の実装
