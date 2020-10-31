@@ -266,6 +266,12 @@ def edit(request, post_id):
    else:
        form = PostAddForm(instance=post)
    return render(request, 'edit.html', {'form': form, 'post':post })
+
+# 削除フォーム用のdelete関数
+def delete(request, post_id):
+   post = get_object_or_404(BoardModel, id=post_id)
+   post.delete()
+   return redirect('app:detailfun')
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # いいね機能の実装
