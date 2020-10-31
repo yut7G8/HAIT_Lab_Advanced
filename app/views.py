@@ -231,7 +231,7 @@ class UserCreateComplete(generic.TemplateView):
 
         return HttpResponseBadRequest()
 
-
+# nagaya_develop_branchの変更箇所
 # 各投稿の詳細ページに飛ぶ
 def detailfunc(request):
     object = BoardModel.objects.all().order_by('-readtext') # BordModelモデルの記事（objects）を全て(all())作成された順番（order_by('-readtext')）に取得してobject変数に代入
@@ -241,13 +241,6 @@ def detailfunc(request):
 def everypost(request, post_id): # urls.pyから送られてくるrequestとeverypost_idを取得
     post = get_object_or_404(BoardModel, id=post_id) # idが存在しなかった場合、「404 not found」
     return render(request, 'everypost.html', {'post': post})
-
-# いいね機能の実装
-def goodfunc(request, pk):
-    post = BoardModel.objects.get(pk=pk)
-    post.good = post.good + 1
-    post.save()
-    return redirect('app:student_home')
 
 # 投稿フォーム用のadd関数
 def add(request):
@@ -261,3 +254,13 @@ def add(request):
    else:   
        form = PostAddForm()
    return render(request, 'blog_app/add.html', {'form': form})
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# いいね機能の実装
+def goodfunc(request, pk):
+    post = BoardModel.objects.get(pk=pk)
+    post.good = post.good + 1
+    post.save()
+    return redirect('app:student_home')
