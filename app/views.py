@@ -255,7 +255,17 @@ def add(request):
        form = PostAddForm()
    return render(request, 'blog_app/add.html', {'form': form})
 
-
+# 編集フォーム用のedit関数
+def edit(request, post_id):
+   post = get_object_or_404(BoardModel, id=post_id)
+   if request.method == "POST":
+       form = PostAddForm(request.POST, request.FILES, instance=post)
+       if form.is_valid():
+           form.save()
+           return redirect('app:detailfun', post_id=post.id)
+   else:
+       form = PostAddForm(instance=post)
+   return render(request, 'app/edit.html', {'form': form, 'post':post })
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # いいね機能の実装
