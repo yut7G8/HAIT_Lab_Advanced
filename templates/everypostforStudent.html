@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>everypost page</h1>
+<hr>
+{% if post.image %}
+ <img src="{{ post.image.url }}">
+{% endif %}
+<h4>タイトル：{{ post.title }}</h4>
+<p>内容：{{ post.content }}</p>
+{% endblock %}
