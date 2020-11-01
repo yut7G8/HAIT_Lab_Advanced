@@ -43,14 +43,10 @@ def loginfunc(request):
         if user is not None:
             login(request, user_login)
             if user_login.is_student:
-                #return render(request, 'list.html')
-                #return redirect('app:list')
-                return redirect('app:student_home')
+                return redirect('app:student_home') # student_homeにリダイレクトする
             if user_login.is_society:
-                #return render(request, 'society_home.html')
                 return redirect('app:detailfun')
             if user_login.is_company:
-                #return render(request, 'company_home.html')
                 return redirect('app:company_home')
         else:
             return render(request, 'login.html', {'error':'メールアドレスかパスワードが間違っています'})
@@ -62,9 +58,8 @@ def loginfunc(request):
 @login_required
 @student_required
 def student_home(request):
-    object_list = BoardModel.objects.all()
+    object_list = BoardModel.objects.all().order_by('-readtext') # サークルの投稿フォームと同様にreadtextまで取ってくる
     return render(request, 'student_home.html', {'object_list':object_list})
-    #return render(request,'student_home.html')
 
 
 # SocietyUserのhome画面
