@@ -44,8 +44,8 @@
 
     {% for post in object_list %}
     <a href="{% url 'app:everypost' post_id=post.id %}">
-      {% if post.image %}
-        <img src="{{ post.image.url }}">
+      {% if post.images %}
+        <img src="{{ post.images.url }}">
       {% endif %}
         <h5>{{post.title|truncatechars:13 | linebreaksbr}}</h5>
         <p>{{post.content}}</p>
