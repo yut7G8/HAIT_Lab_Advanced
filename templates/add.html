@@ -36,11 +36,23 @@
   </header>
 
 {% endblock header %}
+
 {% block content %}
-<h1>Add page</h1>
+<h1 class="mt-5 pt-4 text-center">新規投稿</h1>
 <form action="{% url 'app:add' %}" method="POST" enctype="multipart/form-data">
  {% csrf_token %}
- {{ form.as_p }}
- <button type="submit">投稿する</button>
+
+ <label for="id_title" class="sr-only">タイトル</label>
+ <input type="text" name="title" placeholder="タイトル" maxlength="50" class="form-control mb-3" required id="id_title">
+
+ <label for="id_text" class="sr-only">本文</label>
+ <textarea type="text" name="text" placeholder="本文" cols="40" rows="10" class="form-control mb-3" required id="id_text"></textarea>
+ 
+ <div class="mb-3 form-control text-secondary">
+    <label>画像</label>
+        {{ form.images }}
+ </div>
+ <!-- {{ form.as_p }} -->
+ <button type="submit" class="btn btn-block btn-outline-success">投稿する</button>
 </form>
 {% endblock %}
