@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block customcss %}
@@ -39,20 +38,25 @@
 {% endblock header %}
 
 {% block content %}
-<h1>this is index.</h1>
+<h1 class="mt-5 pt-4 text-center">投稿一覧</h1>
+<div class="d-flex justify-content-center flex-wrap">
 {% for post in object%}
 <a href="{% url 'app:everypost' post_id=post.id %}">
+<div class="card m-4" style="min-width: 300; max-height: 490;"></div>
  {% if post.image %}
-   <img src="{{ post.image.url }}">
+   <img style="max-width: 300; max-height: 300;" class="card-img-top" src="{{ post.image.url }}">
+  {% else %}
+   <div class="p-1 border border-secondary text-center pt-5" style="min-width: 300; min-height: 225;">No Image</div>
  {% endif %}
-   <h5>{{post.title|truncatechars:13 | linebreaksbr}}</h5>
-   <p>{{post.content}}</p>
+ <h4 class="card-title">{{post.title|truncatechars:10 | linebreaksbr}}</h4>
+ <p class="card-text">
+  {{ post.content|truncatechars:17 }}
+ </p>
+ <!-- <p>#{{post.author}}</p> -->
+ <!-- <p>{{post.good}}</p>
+ <p>{{post.read}}</p> -->
+ <p>{{post.readtext}}</p>
 </a>
-   <p>#{{post.author}}</p>
-   <p>{{post.good}}</p>
-   <p>{{post.read}}</p>
-   <p>{{post.readtext}}</p>
-   <hr>
 {% endfor %}
-<button><a href="{% url 'app:add' %}">投稿</a></button>
+<!-- <button><a href="{% url 'app:add' %}">投稿</a></button> -->
 {% endblock %}
