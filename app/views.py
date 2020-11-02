@@ -269,10 +269,10 @@ def delete(request, post_id):
    post.delete()
    return redirect('app:detailfun')
 
-# 学生側は別のeveyypost(編集削除できない)ページを作る。そのための関数。
-def everypostforStuednt(request, post_id):
-    post = get_object_or_404(BoardModel, id=post_id) # idが存在しなかった場合、「404 not found」
-    return render(request, 'everypostforStudent.html', {'post': post})
+# # 学生側は別のeveyypost(編集削除できない)ページを作る。そのための関数。
+# def everypostforStuednt(request, post_id):
+#     post = get_object_or_404(BoardModel, id=post_id) # idが存在しなかった場合、「404 not found」
+#     return render(request, 'everypostforStudent.html', {'post': post})
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 # いいね機能の実装
