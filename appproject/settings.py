@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'django_cleanup',
-    'bootstrap4', # 追加
+    'bootstrap4',
+    'widget_tweaks', # 追加
 ]
 
 MIDDLEWARE = [
