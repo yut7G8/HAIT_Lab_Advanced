@@ -38,7 +38,7 @@
 {% endblock header %}
 
 {% block content %}
-<h1 class="mt-5 pt-4 text-center">投稿一覧</h1>
+<h1 class="mt-5 pt-4 text-center">サークル用投稿一覧</h1>
 <div class="d-flex justify-content-center flex-wrap">
 {% for post in object%}
 <a href="{% url 'app:everypost' post_id=post.id %}">
